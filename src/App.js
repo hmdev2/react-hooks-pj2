@@ -5,31 +5,31 @@ import { useState } from 'react';
 function App() {
   const [reverse, setReverse] = useState(false);
   const [counter, setCounter] = useState(0);
-  const reverter = reverse ? 'reverse' : '';
+  const reverseClass = reverse ? 'reverse' : '';
 
-  const handleReverse = () => {
-    setReverse(!reverse);
+  const handleClick = () => {
+    setReverse((prevReverse) => !prevReverse);
   };
 
-  const handleCounter = () => {
-    setCounter(counter + 1);
+  const handleIncrement = () => {
+    setCounter((prevCounter) => prevCounter + 1);
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className={`App-logo ${reverter}`} alt="logo" />
+        <img src={logo} className={`App-logo ${reverseClass}`} alt="logo" />
 
         <h1>Counter: {counter}</h1>
 
         <p>
-          <button type="button" onClick={handleReverse}>
-            Reverse {reverter}
+          <button type="button" onClick={handleClick}>
+            Reverse {reverseClass}
           </button>
         </p>
 
-        <button type="button" onClick={handleCounter}>
-          Count
+        <button type="button" onClick={handleIncrement}>
+          Increment {counter}
         </button>
       </header>
     </div>
