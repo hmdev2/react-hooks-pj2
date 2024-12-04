@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import P from 'prop-types';
 
-const Posts = ({ post }) => {
+const Posts = ({ post, handleClick }) => {
   return (
-    <div key={post.id} className="post">
-      <h1>{post.title}</h1>
+    <div className="post">
+      <h1 style={{ fontSize: '14px' }} onClick={() => handleClick(post.title)}>
+        {post.title}
+      </h1>
       <p>{post.body}</p>
     </div>
   );
@@ -17,22 +19,39 @@ Posts.propTypes = {
     title: P.string,
     body: P.string,
   }),
+  handleClick: P.func,
 };
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [value, setValue] = useState('');
+  const input = useRef(null);
+  const counter = useRef(0);
 
   useEffect(() => {
     fetch('http://jsonplaceholder.typicode.com/posts')
       .then((r) => r.json())
       .then((r) => setPosts(r));
+  }, []);
+
+  useEffect(() => {
+    input.current.focus();
+  }, [value]);
+
+  useEffect(() => {
+    counter.current++;
   });
+
+  const handleClick = (value) => {
+    setValue(value);
+  };
 
   return (
     <div className="App">
+      <h6>Renderizou: {counter.current}X</h6>
       <p>
         <input
+          ref={input}
           type="search"
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -42,7 +61,9 @@ function App() {
         return (
           posts.length > 0 &&
           posts.map((post) => {
-            return <Posts key={post.id} post={post} />;
+            return (
+              <Posts key={post.id} handleClick={handleClick} post={post} />
+            );
           })
         );
       }, [posts])}
