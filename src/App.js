@@ -1,74 +1,68 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
 import './App.css';
-import P from 'prop-types';
+import { createContext } from 'react';
+import { useState } from 'react';
+import { useContext } from 'react';
 
-const Posts = ({ post, handleClick }) => {
+const GlobalState = {
+  title: 'O título que contexto',
+  body: 'O body do contexto',
+  counter: 0,
+};
+
+const GlobalContext = createContext();
+
+// eslint-disable-next-line
+const Div = ({ children }) => {
   return (
-    <div className="post">
-      <h1 style={{ fontSize: '14px' }} onClick={() => handleClick(post.title)}>
-        {post.title}
-      </h1>
-      <p>{post.body}</p>
+    <div className="App">
+      <H1 />
+      <P />
     </div>
   );
 };
 
-Posts.propTypes = {
-  post: P.shape({
-    id: P.number,
-    title: P.string,
-    body: P.string,
-  }),
-  handleClick: P.func,
+const H1 = () => {
+  const theState = useContext(GlobalContext);
+  const {
+    contextState: { title, counter },
+  } = theState;
+  return (
+    <h1>
+      {title} {counter}
+    </h1>
+  );
+};
+
+const P = () => {
+  const theState = useContext(GlobalContext);
+  const {
+    contextState: { body, counter },
+    setContextState,
+  } = theState;
+  return (
+    <p
+      style={{ cursor: 'pointer', userSelect: 'none' }}
+      onClick={() =>
+        setContextState((prevState) => ({
+          ...prevState,
+          counter: prevState.counter + 1,
+        }))
+      }
+    >
+      {body}
+      {counter}
+    </p>
+  );
 };
 
 function App() {
-  const [posts, setPosts] = useState([]);
-  const [value, setValue] = useState('');
-  const input = useRef(null);
-  const counter = useRef(0);
-
-  useEffect(() => {
-    fetch('http://jsonplaceholder.typicode.com/posts')
-      .then((r) => r.json())
-      .then((r) => setPosts(r));
-  }, []);
-
-  useEffect(() => {
-    input.current.focus();
-  }, [value]);
-
-  useEffect(() => {
-    counter.current++;
-  });
-
-  const handleClick = (value) => {
-    setValue(value);
-  };
+  const [contextState, setContextState] = useState(GlobalState);
 
   return (
-    <div className="App">
-      <h6>Renderizou: {counter.current}X</h6>
-      <p>
-        <input
-          ref={input}
-          type="search"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-      </p>
-      {useMemo(() => {
-        return (
-          posts.length > 0 &&
-          posts.map((post) => {
-            return (
-              <Posts key={post.id} handleClick={handleClick} post={post} />
-            );
-          })
-        );
-      }, [posts])}
-      {posts.length <= 0 && <p>Ainda não existem posts.</p>}
-    </div>
+    <GlobalContext.Provider value={{ contextState, setContextState }}>
+      <Div />
+    </GlobalContext.Provider>
   );
 }
 
