@@ -1,14 +1,16 @@
-import { useContext } from 'react';
-import { GlobalContext } from '../../contexts/AppContext';
+import { useContext, useRef } from 'react';
+import { Context } from '../../contexts/AppContext';
 
 export const H1 = () => {
-  const theState = useContext(GlobalContext);
-  const {
-    contextState: { title, counter },
-  } = theState;
+  const context = useContext(Context);
+  const inputRef = useRef();
+
   return (
-    <h1>
-      {title} {counter}
-    </h1>
+    <>
+      <h1 onClick={() => context.changeTitle(inputRef.current.value)}>
+        {context.state.title}
+      </h1>
+      <input type="text" ref={inputRef} />
+    </>
   );
 };

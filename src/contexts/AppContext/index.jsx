@@ -1,15 +1,25 @@
-import { createContext, useState } from 'react';
+import P from 'prop-types';
+import { createContext, useReducer } from 'react';
 import { GlobalState } from './data';
+import { reducer } from '../../Reducers/reducer.js';
+import { actions } from '../../Actions/actions.js';
 
-export const GlobalContext = createContext();
+export const Context = createContext();
 
-// eslint-disable-next-line
 export const AppContext = ({ children }) => {
-  const [contextState, setState] = useState(GlobalState);
+  const [state, dispatch] = useReducer(reducer, GlobalState);
+
+  const changeTitle = (payload) => {
+    dispatch({ type: actions.CHANGE_TITLE, payload });
+  };
 
   return (
-    <GlobalContext.Provider value={{ contextState, setState }}>
+    <Context.Provider value={{ state, changeTitle }}>
       {children}
-    </GlobalContext.Provider>
+    </Context.Provider>
   );
+};
+
+AppContext.propTypes = {
+  children: P.node,
 };

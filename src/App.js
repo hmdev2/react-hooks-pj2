@@ -1,12 +1,14 @@
 import React from 'react';
 import './App.css';
-import { AppContext, GlobalContext } from './contexts/AppContext';
-import { Div } from './components/Div';
+import { AppContext } from './contexts/AppContext';
+import { H1 } from './components/H1';
 
 function App() {
   return (
     <AppContext>
-      <Div />
+      <div className="App">
+        <H1 />
+      </div>
     </AppContext>
   );
 }
