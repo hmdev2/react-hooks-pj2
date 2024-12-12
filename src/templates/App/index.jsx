@@ -1,11 +1,13 @@
 import React from 'react';
 import './styles.css';
+import { PostsProvider } from '../../contexts/PostsProvider';
+import { Posts } from '../../components/Posts';
 
 function App() {
   return (
-    <div className="App">
-      <h1>App</h1>
-    </div>
+    <PostsProvider>
+      <Posts />
+    </PostsProvider>
   );
 }
 
