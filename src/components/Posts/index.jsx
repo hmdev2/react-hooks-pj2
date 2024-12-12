@@ -28,9 +28,9 @@ export const Posts = () => {
         </p>
       )}
 
-      {postsState.posts.map((post) => {
-        <p key={post.id}>{post.title}</p>;
-      })}
+      {postsState.posts.map((post) => (
+        <p key={post.id}>{post.title}</p>
+      ))}
     </div>
   );
 };
